@@ -9,9 +9,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Grotesk:wght@700&display=swap');
         
-        :root {
-            --safe-height: 100dvh; /* Altura dinâmica para mobile */
-        }
+        :root { --safe-height: 100dvh; }
 
         body {
             font-family: 'Inter', sans-serif;
@@ -19,17 +17,16 @@
             color: white;
             overflow: hidden;
             touch-action: manipulation;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
         }
 
-        /* Correção do Noise (estava muito opaco) */
+        /* Noise Sutil */
         .noise-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
             pointer-events: none;
-            opacity: 0.07; /* Reduzido drasticamente para não lavar a tela */
+            opacity: 0.07;
             z-index: 40;
             mix-blend-mode: overlay;
         }
@@ -48,27 +45,14 @@
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-            overflow: hidden; /* Previne scroll interno indesejado */
+            overflow: hidden;
         }
 
-        .slide.active {
-            display: flex;
-            opacity: 1;
-            transform: scale(1);
-            z-index: 10;
-        }
+        .slide.active { display: flex; opacity: 1; transform: scale(1); z-index: 10; }
 
-        /* Gradients Animados */
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .animated-bg {
-            background-size: 200% 200%;
-            animation: gradientMove 15s ease infinite;
-        }
+        /* Gradients */
+        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .animated-bg { background-size: 200% 200%; animation: gradientMove 15s ease infinite; }
 
         .bg-intro { background-image: linear-gradient(-45deg, #064e3b, #0f172a, #166534); }
         .bg-time { background-image: linear-gradient(-45deg, #312e81, #1e1b4b, #4338ca); }
@@ -76,21 +60,31 @@
         .bg-stats { background-image: linear-gradient(-45deg, #4c1d95, #2e1065, #7c3aed); }
         .bg-enemy { background-image: linear-gradient(-45deg, #713f12, #451a03, #ca8a04); }
         .bg-abnt { background-image: linear-gradient(-45deg, #7f1d1d, #450a0a, #991b1b); }
+        .bg-toni { background-image: linear-gradient(-45deg, #2563eb, #1e40af, #60a5fa); }
         .bg-resilience { background-image: linear-gradient(-45deg, #0f766e, #134e4a, #14b8a6); }
         .bg-gold { background-image: linear-gradient(-45deg, #b45309, #78350f, #d97706); }
         .bg-summary { background-image: linear-gradient(-45deg, #0891b2, #155e75, #22d3ee); }
+        
+        /* Estilo para o Slide da Foto */
+        .bg-photo {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Overlay para escurecer a foto e o texto aparecer */
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%);
+            z-index: 1;
+        }
 
         /* Animações */
         .animate-pop { opacity: 0; transform: translateY(30px) scale(0.9); }
         .slide.active .animate-pop { animation: popUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
         .animate-float { animation: float 6s ease-in-out infinite; }
-        
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.4s; }
-        .delay-400 { animation-delay: 0.6s; }
-        .delay-500 { animation-delay: 0.8s; }
-
+        .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; } .delay-300 { animation-delay: 0.4s; } .delay-400 { animation-delay: 0.6s; } .delay-500 { animation-delay: 0.8s; }
         @keyframes popUp { to { opacity: 1; transform: translateY(0) scale(1); } }
         @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
 
@@ -105,99 +99,22 @@
         }
 
         .text-stroke { -webkit-text-stroke: 1px rgba(255,255,255,0.3); color: transparent; }
+        .bg-pattern-dots { background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 20px 20px; }
+        .bg-pattern-grid { background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 20px 20px; }
 
-        /* Estilos Especiais de Background (Padrões) */
-        .bg-pattern-dots {
-            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-        .bg-pattern-grid {
-            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 20px 20px;
-        }
-
-        /* Container das Bolhas Corrigido */
-        .bubble-container {
-            position: relative;
-            width: 100%;
-            max-width: 350px;
-            height: 350px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .bubble {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            border-radius: 50%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        /* Bolha Principal - Centralizada pelo Flexbox */
-        .bubble-main {
-            position: relative;
-            width: 160px; height: 160px;
-            font-size: 2.5rem;
-            font-weight: 900;
-            background: white;
-            color: #4c1d95; /* Roxo escuro para contraste */
-            z-index: 20;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        /* Bolhas Secundárias - Posicionamento Absoluto Relativo ao Container */
-        .bubble-secondary-1 {
-            position: absolute;
-            width: 100px; height: 100px;
-            top: 0; left: 10px;
-            font-size: 1rem;
-            font-weight: 800;
-            background: #818cf8; /* Indigo */
-            color: white;
-            z-index: 15;
-            animation: float 5s ease-in-out infinite reverse;
-        }
-
-        .bubble-secondary-2 {
-            position: absolute;
-            width: 90px; height: 90px;
-            bottom: 20px; right: 10px;
-            font-size: 0.9rem;
-            font-weight: 800;
-            background: #c084fc; /* Purple */
-            color: white;
-            z-index: 15;
-            animation: float 4s ease-in-out infinite;
-        }
-
-        .bubble-secondary-3 {
-            position: absolute;
-            width: 80px; height: 80px;
-            top: 20px; right: 0;
-            font-size: 0.8rem;
-            font-weight: 800;
-            background: #f472b6; /* Pink */
-            color: white;
-            z-index: 15;
-            animation: float 7s ease-in-out infinite reverse;
-        }
+        /* Bolhas */
+        .bubble-container { position: relative; width: 100%; max-width: 350px; height: 350px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+        .bubble { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-radius: 50%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); }
+        .bubble-main { position: relative; width: 160px; height: 160px; font-size: 2.5rem; font-weight: 900; background: white; color: #4c1d95; z-index: 20; animation: float 6s ease-in-out infinite; }
+        .bubble-secondary-1 { position: absolute; width: 100px; height: 100px; top: 0; left: 10px; font-size: 1rem; font-weight: 800; background: #818cf8; color: white; z-index: 15; animation: float 5s ease-in-out infinite reverse; }
+        .bubble-secondary-2 { position: absolute; width: 90px; height: 90px; bottom: 20px; right: 10px; font-size: 0.9rem; font-weight: 800; background: #c084fc; color: white; z-index: 15; animation: float 4s ease-in-out infinite; }
+        .bubble-secondary-3 { position: absolute; width: 80px; height: 80px; top: 20px; right: 0; font-size: 0.8rem; font-weight: 800; background: #f472b6; color: white; z-index: 15; animation: float 7s ease-in-out infinite reverse; }
     </style>
 </head>
 <body>
 
     <div id="app" class="relative h-screen w-full overflow-hidden">
-        <!-- Efeito Noise Corrigido -->
         <div class="noise-overlay"></div>
-
-        <!-- Barras de Progresso -->
         <div class="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-4" id="progress-container"></div>
 
         <!-- SLIDE 0: Intro -->
@@ -205,7 +122,7 @@
             <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
                 <i data-lucide="flask-conical" class="w-96 h-96 text-green-300 animate-float"></i>
             </div>
-            <h2 class="text-sm font-bold mb-6 tracking-[0.3em] uppercase animate-pop delay-100">Retrospectiva da Feira</h2>
+            <h2 class="text-sm font-bold mb-6 tracking-[0.3em] uppercase animate-pop delay-100">Retrospectiva</h2>
             <div class="relative animate-pop delay-200 z-10">
                 <h1 class="text-5xl font-black leading-none font-grotesk text-stroke opacity-30 absolute top-1 left-1 z-0 w-full">CLIMPLENT</h1>
                 <h1 class="text-5xl font-black leading-none font-grotesk relative z-10">CLIMPLENT</h1>
@@ -213,31 +130,28 @@
             <div class="mt-6 inline-block bg-white text-green-900 font-bold text-xl px-6 py-2 rounded-full transform -rotate-2 animate-pop delay-300 shadow-lg z-20">
                 Bastidores
             </div>
-            <p class="mt-12 px-8 text-lg animate-pop delay-500 font-light opacity-90 z-20">O que ninguém conta sobre fazer cimento...</p>
+            <p class="mt-12 px-8 text-lg animate-pop delay-500 font-light opacity-90 z-20">Isso o @Climplentoficial não mostra...</p>
         </div>
 
-        <!-- SLIDE 1: Tempo de Projeto -->
+        <!-- SLIDE 1: Tempo -->
         <div class="slide bg-time animated-bg" data-index="1">
             <i data-lucide="calendar-clock" class="w-16 h-16 mb-6 text-white/80 animate-float"></i>
-            <p class="text-xl font-bold animate-pop delay-100">A jornada começou em<br>25 de fevereiro...</p>
-            
+            <p class="text-xl font-bold animate-pop delay-100">A jornada começou em<br> de fevereiro de 2024...</p>
             <div class="my-8 animate-pop delay-200">
                 <span id="days-counter" class="text-8xl font-black font-grotesk tracking-tighter">0</span>
                 <p class="text-sm uppercase tracking-widest mt-2 opacity-80 font-bold">Dias de Projeto</p>
             </div>
-
             <div class="animate-pop delay-500 glass-card p-4 rounded-xl max-w-xs mx-auto">
-                <p class="text-sm">Vocês resistiram bravamente. (E o projeto também).</p>
+                <!-- <p class="text-sm">Vocês resistiram bravamente. <br> (E o projeto também).</p> -->
+                <p class="text-sm font-medium">Vocês sobreviveram a <span class="text-cyan-300 font-bold">146 versões</span> diferentes da documentação. <br><span style="font-size: 12px; color: #ffffff67;">(sim eu contei...)</span></p>
             </div>
         </div>
 
-        <!-- SLIDE 2: Evolução do Artigo -->
+        <!-- SLIDE 2: Evolução -->
         <div class="slide bg-evolution animated-bg" data-index="2">
             <h2 class="text-2xl font-bold mb-2 animate-pop delay-100 w-full z-20 relative uppercase tracking-widest">A Evolução do Doc</h2>
             <p class="text-xs opacity-70 mb-8 animate-pop delay-100">Cresceu mais que a nossa paciência:</p>
-            
             <div class="flex items-center justify-center gap-4 w-full max-w-sm px-2 mb-8">
-                <!-- Antes -->
                 <div class="flex flex-col items-center animate-pop delay-200 opacity-70">
                     <div class="w-20 h-24 border-2 border-white/30 rounded bg-white/10 flex items-center justify-center mb-2">
                         <span class="text-xl font-bold">v1</span>
@@ -245,10 +159,7 @@
                     <p class="text-sm font-bold">11 Pgs</p>
                     <p class="text-[10px]">14.747 chars</p>
                 </div>
-
                 <i data-lucide="arrow-right" class="w-8 h-8 text-white animate-pulse"></i>
-
-                <!-- Depois -->
                 <div class="flex flex-col items-center animate-pop delay-400 scale-110">
                     <div class="w-24 h-32 bg-white text-pink-900 rounded shadow-2xl flex flex-col items-center justify-center mb-2 relative overflow-hidden">
                          <div class="absolute bottom-0 w-full h-2 bg-pink-500"></div>
@@ -259,17 +170,15 @@
                     <p class="text-xs font-bold uppercase tracking-wider">Caracteres</p>
                 </div>
             </div>
-
             <div class="animate-pop delay-500 px-8">
                  <p class="text-sm italic opacity-90 bg-black/20 p-3 rounded-lg">Isso é um aumento de <span class="font-bold text-white">364%</span> de puro conhecimento (e café).</p>
             </div>
         </div>
 
-        <!-- SLIDE 3: Estatísticas do Caos -->
+        <!-- SLIDE 3: Estatísticas -->
         <div class="slide bg-stats animated-bg" data-index="3">
-            <h2 class="text-2xl font-bold mb-2 animate-pop delay-100 w-full z-20 relative">A Química do Surto</h2>
+            <h2 class="text-2xl font-bold mb-2 animate-pop delay-100 w-full z-20 relative">Nossa Química</h2>
             <p class="text-xs opacity-70 mb-4 animate-pop delay-100">Dados não oficiais do laboratório:</p>
-            
             <div class="bubble-container my-4 z-10">
                 <div class="bubble bubble-main animate-pop delay-200">
                     <span class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">PESO</span>
@@ -286,33 +195,33 @@
                 </div>
                 <div class="bubble bubble-secondary-3 animate-pop delay-500 flex flex-col justify-center">
                     <span class="leading-tight text-2xl font-black">∞</span>
-                    <span class="text-[10px] font-bold uppercase">Cafés</span>
+                    <span class="text-[10px] font-bold uppercase">Noites em claro</span>
                 </div>
             </div>
             <p class="text-sm animate-pop delay-500 relative z-20 px-8 mt-4 opacity-80 font-bold">A metodologia? "Confia no processo".</p>
         </div>
 
-        <!-- SLIDE 4: Vilão 1 (Matheus) -->
+        <!-- SLIDE 4: Vilão 1 (Matheus Lerdo) -->
         <div class="slide bg-enemy animated-bg" data-index="4">
             <div class="absolute top-10 right-10 animate-pulse-slow text-yellow-300">
-                <i data-lucide="signal-low" class="w-8 h-8 fill-current"></i>
+                <i data-lucide="hourglass" class="w-8 h-8 fill-current"></i>
             </div>
-            <p class="text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-pop delay-100 opacity-80">Maior Desafio do Ano</p>
+            <p class="text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-pop delay-100 opacity-80">Teste de Paciência</p>
             
             <div class="w-64 h-64 bg-gray-900 rounded-full mb-8 animate-pop delay-200 border-4 border-white/20 shadow-2xl overflow-hidden flex items-center justify-center relative">
                 <div class="absolute inset-0 opacity-20 bg-pattern-dots"></div>
                 <div class="z-10 text-center flex flex-col items-center">
-                    <i data-lucide="message-square-warning" class="w-24 h-24 mx-auto mb-2 text-yellow-500 animate-bounce"></i>
-                    <h1 class="text-xl font-black leading-tight">SE COMUNICAR<br>COM O<br>MATHEUS</h1>
+                    <i data-lucide="refresh-cw" class="w-24 h-24 mx-auto mb-2 text-yellow-500 animate-spin-slow" style="animation-duration: 8s"></i>
+                    <h1 class="text-lg font-black leading-tight">EXPLICAR PRO<br>MATHEUS<br>DE NOVO</h1>
                 </div>
             </div>
 
             <div class="flex flex-col gap-2 w-full max-w-xs animate-pop delay-300 text-left px-4 bg-white/10 p-4 rounded-lg">
-                <p class="text-xs font-bold uppercase opacity-50 mb-2">Taxa de resposta:</p>
-                <div class="w-full bg-gray-700 rounded-full h-4 mb-2 overflow-hidden">
-                    <div class="bg-red-500 h-4 rounded-full animate-pulse" style="width: 5%"></div>
+                <p class="text-xs font-bold uppercase opacity-50 mb-2">Velocidade de Processamento:</p>
+                <div class="w-full bg-gray-700 rounded-full h-4 mb-2 overflow-hidden relative">
+                    <div class="bg-yellow-500 h-4 rounded-full absolute top-0 left-0" style="width: 10%; animation: loading 3s infinite ease-in-out"></div>
                 </div>
-                <p class="text-xs italic text-center">"Visualizou e não respondeu..."</p>
+                <p class="text-xs italic text-center">"Ah, sim... não, pera. Explica dnv?  plsss"</p>
             </div>
         </div>
 
@@ -335,32 +244,45 @@
                     <span class="text-sm opacity-80">Referências</span>
                     <span class="font-bold text-red-300">Sumiram</span>
                 </div>
-                <p class="text-xs opacity-60 mt-2 text-center">"O arquivo final_agora_vai_v2.docx corrompeu."</p>
+                <p class="text-xs opacity-60 mt-2 text-center">"O arquivo final_agora_vai_v6.docx corrompeu."</p>
             </div>
         </div>
 
-        <!-- SLIDE 6: Superação -->
-        <div class="slide bg-resilience animated-bg" data-index="6">
+        <!-- SLIDE 6: Toni Helpou -->
+        <div class="slide bg-toni animated-bg" data-index="6">
+            <h2 class="text-sm font-bold mb-2 animate-pop delay-100 uppercase tracking-[0.2em] opacity-90">Suporte Técnico & Emocional</h2>
+            <div class="bubble-container my-6 z-10 animate-pop delay-200">
+                <div class="bubble bubble-main shadow-blue-500/50 shadow-2xl">
+                    <i data-lucide="life-buoy" class="w-8 h-8 text-blue-600 mb-1"></i>
+                    <span class="leading-none text-6xl font-black text-blue-800">27</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 mt-1">Vezes</span>
+                </div>
+            </div>
+            <h1 class="text-4xl font-black animate-pop delay-300 leading-none text-white mb-4">O TONI<br>HELPOU</h1>
+            <div class="animate-pop delay-400 glass-card p-4 rounded-xl max-w-xs mx-auto border-l-4 border-blue-400">
+                <p class="text-sm italic">"Seja formatando, fazendo planilhas, acalmando ou apenas existindo, eu estava lá."</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Superação -->
+        <div class="slide bg-resilience animated-bg" data-index="7">
             <h2 class="text-sm font-bold mb-8 animate-pop delay-100 uppercase tracking-[0.3em] opacity-80">Zona de Risco</h2>
-            
             <div class="bg-white/10 p-6 rounded-2xl w-full max-w-xs mb-8 animate-pop delay-200 border border-teal-400/30 relative overflow-hidden shadow-xl">
                  <div class="absolute -right-4 -top-4 w-24 h-24 bg-teal-500/20 rounded-full blur-xl"></div>
-                 
                  <h1 class="text-6xl font-black text-white mb-2">2<span class="text-2xl text-teal-300 font-bold"> PESSOAS</span></h1>
                  <p class="text-lg font-bold mb-4">tentaram desistir...</p>
                  <div class="w-full h-px bg-white/20 mb-4"></div>
                  <h1 class="text-6xl font-black text-white mb-2">2<span class="text-2xl text-teal-300 font-bold"> VEZES</span></h1>
                  <p class="text-lg font-bold">cada uma.</p>
             </div>
-
             <div class="animate-pop delay-400 text-center px-8">
                 <h2 class="text-3xl font-black text-white mb-2">MAS VOCÊS<br><span class="text-teal-300">FICARAM!</span></h2>
-                <p class="text-sm font-medium opacity-90 bg-black/20 p-3 rounded-lg inline-block shadow-sm">Parabéns pela resiliência. O projeto só existe porque vocês não soltaram a mão.</p>
+                <p class="text-sm font-medium opacity-90 bg-black/20 p-3 rounded-lg inline-block shadow-sm">Parabéns pela resiliência. O projeto só continua porque vocês não soltaram a mão.</p>
             </div>
         </div>
 
-        <!-- SLIDE 7: O Veredito -->
-        <div class="slide bg-gold animated-bg" data-index="7">
+        <!-- SLIDE 8: O Veredito -->
+        <div class="slide bg-gold animated-bg" data-index="8">
             <h2 class="text-sm font-bold mb-8 animate-pop delay-100 uppercase tracking-[0.4em] text-yellow-100">O Veredito</h2>
             <div class="bg-yellow-500/20 p-8 rounded-full w-56 h-56 flex items-center justify-center mb-8 animate-pop delay-200 shadow-[0_0_60px_rgba(251,191,36,0.5)] border border-yellow-400/50 relative">
                  <div class="absolute inset-0 rounded-full animate-pulse bg-yellow-400/10"></div>
@@ -373,8 +295,8 @@
             </div>
         </div>
 
-        <!-- SLIDE 8: Resumo + Torcida -->
-        <div class="slide bg-summary animated-bg" data-index="8">
+        <!-- SLIDE 9: Resumo + Torcida Toni -->
+        <div class="slide bg-summary animated-bg" data-index="9">
             <h1 class="text-3xl font-black mb-4 animate-pop delay-100 font-grotesk">RESUMO DO GRUPO</h1>
             <div class="glass-card p-6 rounded-2xl border border-white/20 w-full max-w-xs animate-pop delay-200 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-400 rounded-full blur-3xl opacity-50"></div>
@@ -404,10 +326,10 @@
             </div>
             
             <div class="animate-pop delay-400 mt-6 w-full max-w-xs">
-                 <div class="bg-white text-black p-4 rounded-xl text-center shadow-xl rotate-1">
+                 <div class="bg-white text-black p-4 rounded-xl text-center shadow-xl rotate-1 transform hover:scale-105 transition-transform">
                      <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">Mensagem Especial</p>
                      <p class="font-black text-lg">"Estou torcendo muito por vocês! Arrasem!"</p>
-                     <p class="text-right text-xs mt-2 opacity-50">- Seu amigo</p>
+                     <p class="text-right text-sm font-bold mt-2 text-blue-800">- Toni</p>
                  </div>
             </div>
 
@@ -418,7 +340,23 @@
             </div>
         </div>
 
-        <!-- Áreas de Toque -->
+        <!-- SLIDE 10: Foto da Equipe (NOVO) -->
+        <div class="slide bg-photo" data-index="10" style="background-image: url('https://github.com/WithLoveTony/ClimplentGL/blob/main/climpzitos.jpg?raw=true');">
+            <div class="photo-overlay"></div>
+            
+            <div class="relative z-10 flex flex-col items-center justify-end h-full w-full pb-20 px-6">
+                <h1 class="text-4xl font-black mb-2 text-white drop-shadow-lg animate-pop delay-200 text-center">OS<br>CLIMPLENTINHOS</h1>
+                <div class="w-16 h-1 bg-white rounded-full mb-4 animate-pop delay-300"></div>
+                <p class="text-lg font-medium text-white/90 animate-pop delay-400 text-center">Os Melhores do Brasil.</p>
+                
+                <!-- <div class="mt-8 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20 animate-pop delay-500">
+                    <span class="text-sm font-bold tracking-wider text-white"></span>
+                </div> -->
+
+                <p class="absolute bottom-6 right-6 text-xs font-bold text-white/50 animate-pop delay-500">Feito com ❤ pelo Toni.</p>
+            </div>
+        </div>
+
         <div id="tap-left" class="absolute top-0 left-0 w-1/3 h-full z-40"></div>
         <div id="tap-right" class="absolute top-0 right-0 w-2/3 h-full z-40"></div>
     </div>
@@ -432,7 +370,7 @@
         let autoAdvanceTimer;
         const slideDuration = 9000; 
 
-        // Cálculo Dinâmico dos Dias (Começo 25/02/2024)
+        // Cálculo Dinâmico dos Dias
         const startDate = new Date('2024-02-25');
         const today = new Date();
         const timeDiff = Math.abs(today - startDate);
@@ -503,7 +441,6 @@
                     slide.classList.add('active');
                     resetAnimations(slide);
                     
-                    // Slide 1: Dias de Projeto
                     if (idx === 1) {
                         setTimeout(() => animateValue("days-counter", 0, dayDiff, 2000), 500);
                     }
