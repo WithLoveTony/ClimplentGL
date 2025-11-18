@@ -527,7 +527,7 @@
 
         <!-- SLIDE 9: Resumo + Torcida Toni -->
         <div class="slide bg-summary animated-bg" data-index="9">
-            <h1 class="text-3xl font-black mb-4 animate-pop delay-100 font-grotesk">RESUMO DO GRUPO</h1>
+            <h1 class="text-3xl font-black mb-4 animate-pop delay-100 font-grotesk">RESUMO</h1>
             <div
                 class="glass-card p-6 rounded-2xl border border-white/20 w-full max-w-xs animate-pop delay-200 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-400 rounded-full blur-3xl opacity-50"></div>
@@ -565,12 +565,12 @@
                 </div>
             </div>
 
-            <div class="flex gap-3 mt-6 w-full max-w-xs">
-                <button onclick="location.reload()"
+            <!-- <div class="flex gap-3 mt-6 w-full max-w-xs">
+                <button onclick="reload()"
                     class="flex-1 bg-transparent border border-white/30 hover:bg-white/10 font-bold py-3 rounded-full transition-colors animate-pop delay-500 flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Replay
+                    <i data-lucide="rotate-ccw" class="w-4 h-4" style="z-index: 99;"></i> Replay
                 </button>
-            </div>
+            </div> -->
         </div>
 
         <!-- SLIDE 10: Foto da Equipe (NOVO) -->
@@ -706,6 +706,9 @@
             if (e.key === 'ArrowLeft') showSlide(currentIndex - 1);
             if (e.key === 'ArrowRight' || e.key === ' ') showSlide(currentIndex + 1);
         });
+        function reload(forceReload = false) {
+            window.location.reload(forceReload);
+        }
 
         showSlide(0);
     </script>
