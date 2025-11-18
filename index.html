@@ -3,34 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Boa Sorte na Feira!</title>
+    <title>Boa Sorte CLIMPLENT!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Space+Grotesk:wght@700&display=swap');
         
+        :root {
+            --safe-height: 100dvh; /* Altura dinâmica para mobile */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: #000;
             color: white;
             overflow: hidden;
             touch-action: manipulation;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Efeito de Noise */
+        /* Correção do Noise (estava muito opaco) */
         .noise-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJnoiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIwLjY1IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI2cpIiBvcGFjaXR5PSIwLjA1Ii8+PC9zdmc+');
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
             pointer-events: none;
-            opacity: 0.6;
+            opacity: 0.07; /* Reduzido drasticamente para não lavar a tela */
             z-index: 40;
+            mix-blend-mode: overlay;
         }
 
         .slide {
             display: none;
-            height: 100vh;
-            width: 100vw;
+            height: var(--safe-height);
+            width: 100%;
             flex-direction: column;
             justify-content: center;
             align-items: center;
@@ -41,6 +48,7 @@
             opacity: 0;
             transform: scale(0.95);
             transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            overflow: hidden; /* Previne scroll interno indesejado */
         }
 
         .slide.active {
@@ -50,7 +58,7 @@
             z-index: 10;
         }
 
-        /* Gradients Animados (Temática Ciência) */
+        /* Gradients Animados */
         @keyframes gradientMove {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
@@ -62,23 +70,20 @@
             animation: gradientMove 15s ease infinite;
         }
 
-        .bg-intro { background-image: linear-gradient(-45deg, #2563eb, #0f172a, #1e40af); }
-        .bg-days { background-image: linear-gradient(-45deg, #059669, #064e3b, #34d399); }
-        .bg-stats { background-image: linear-gradient(-45deg, #7c3aed, #4c1d95, #8b5cf6); }
-        .bg-stress { background-image: linear-gradient(-45deg, #dc2626, #7f1d1d, #f87171); }
-        .bg-luck { background-image: linear-gradient(-45deg, #fbbf24, #78350f, #fcd34d); }
-        .bg-summary { background-image: linear-gradient(-45deg, #0891b2, #164e63, #22d3ee); }
+        .bg-intro { background-image: linear-gradient(-45deg, #064e3b, #0f172a, #166534); }
+        .bg-time { background-image: linear-gradient(-45deg, #312e81, #1e1b4b, #4338ca); }
+        .bg-evolution { background-image: linear-gradient(-45deg, #be185d, #831843, #db2777); }
+        .bg-stats { background-image: linear-gradient(-45deg, #4c1d95, #2e1065, #7c3aed); }
+        .bg-enemy { background-image: linear-gradient(-45deg, #713f12, #451a03, #ca8a04); }
+        .bg-abnt { background-image: linear-gradient(-45deg, #7f1d1d, #450a0a, #991b1b); }
+        .bg-resilience { background-image: linear-gradient(-45deg, #0f766e, #134e4a, #14b8a6); }
+        .bg-gold { background-image: linear-gradient(-45deg, #b45309, #78350f, #d97706); }
+        .bg-summary { background-image: linear-gradient(-45deg, #0891b2, #155e75, #22d3ee); }
 
         /* Animações */
         .animate-pop { opacity: 0; transform: translateY(30px) scale(0.9); }
-        
-        .slide.active .animate-pop {
-            animation: popUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-        }
-
+        .slide.active .animate-pop { animation: popUp 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
         .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-float-fast { animation: float 4s ease-in-out infinite reverse; }
-        .animate-pulse-slow { animation: pulseGlow 3s infinite; }
         
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
@@ -86,273 +91,335 @@
         .delay-400 { animation-delay: 0.6s; }
         .delay-500 { animation-delay: 0.8s; }
 
-        @keyframes popUp {
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.2); transform: scale(1); }
-            50% { text-shadow: 0 0 25px rgba(255,255,255,0.6); transform: scale(1.02); }
-        }
+        @keyframes popUp { to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
 
         .font-grotesk { font-family: 'Space Grotesk', sans-serif; }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .text-stroke {
-            -webkit-text-stroke: 1px rgba(255,255,255,0.5);
-            color: transparent;
+        .text-stroke { -webkit-text-stroke: 1px rgba(255,255,255,0.3); color: transparent; }
+
+        /* Estilos Especiais de Background (Padrões) */
+        .bg-pattern-dots {
+            background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .bg-pattern-grid {
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
-        /* --- Estilos para o Contêiner de Bolhas Corrigido --- */
+        /* Container das Bolhas Corrigido */
         .bubble-container {
             position: relative;
             width: 100%;
-            max-width: 400px; /* Limita a largura em telas grandes */
-            height: 300px; /* Altura fixa para o layout das bolhas */
-            margin: 0 auto; /* Centraliza o contêiner */
+            max-width: 350px;
+            height: 350px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
-        /* Ajuste de posicionamento para as bolhas */
         .bubble {
-            position: absolute;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            border-radius: 9999px; /* rounded-full */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            background: rgba(255, 255, 255, 0.1); /* glass-card light effect */
-            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
 
+        /* Bolha Principal - Centralizada pelo Flexbox */
         .bubble-main {
-            width: 180px; height: 180px;
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 900; /* font-black */
+            position: relative;
+            width: 160px; height: 160px;
+            font-size: 2.5rem;
+            font-weight: 900;
             background: white;
-            color: #7c3aed; /* purple-900 */
+            color: #4c1d95; /* Roxo escuro para contraste */
             z-index: 20;
-            /* Ajuste de posicionamento para a bolha principal */
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Centraliza em relação ao próprio elemento */
             animation: float 6s ease-in-out infinite;
         }
 
+        /* Bolhas Secundárias - Posicionamento Absoluto Relativo ao Container */
         .bubble-secondary-1 {
+            position: absolute;
             width: 100px; height: 100px;
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 700; /* font-bold */
-            background: rgba(165,180,252,0.8); /* indigo-400/80 */
-            z-index: 10;
-            top: 15%; /* Ajustado */
-            left: 5%; /* Ajustado */
-            transform: translate(0, 0) rotate(-5deg);
-            animation: float 4s ease-in-out infinite reverse;
+            top: 0; left: 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            background: #818cf8; /* Indigo */
+            color: white;
+            z-index: 15;
+            animation: float 5s ease-in-out infinite reverse;
         }
 
         .bubble-secondary-2 {
-            width: 120px; height: 120px;
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 700; /* font-bold */
-            background: rgba(192,132,252,0.8); /* purple-400/80 */
-            z-index: 10;
-            bottom: 10%; /* Ajustado */
-            right: 5%; /* Ajustado */
-            transform: translate(0, 0) rotate(5deg);
-            animation: float 5s ease-in-out infinite;
+            position: absolute;
+            width: 90px; height: 90px;
+            bottom: 20px; right: 10px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            background: #c084fc; /* Purple */
+            color: white;
+            z-index: 15;
+            animation: float 4s ease-in-out infinite;
         }
 
         .bubble-secondary-3 {
+            position: absolute;
             width: 80px; height: 80px;
-            font-size: 0.75rem; /* text-xs */
-            font-weight: 700; /* font-bold */
-            background: rgba(251,113,133,0.6); /* pink-400/60 */
-            z-index: 10;
-            top: 5%; /* Ajustado */
-            right: 25%; /* Ajustado */
-            transform: translate(0, 0) rotate(2deg);
-            animation: float 3s ease-in-out infinite reverse;
+            top: 20px; right: 0;
+            font-size: 0.8rem;
+            font-weight: 800;
+            background: #f472b6; /* Pink */
+            color: white;
+            z-index: 15;
+            animation: float 7s ease-in-out infinite reverse;
         }
-
-
-        /* Media Queries para ajustar tamanhos em telas menores se necessário */
-        @media (max-width: 640px) {
-            .bubble-main { width: 150px; height: 150px; font-size: 2rem; }
-            .bubble-secondary-1 { width: 80px; height: 80px; font-size: 0.75rem; top: 10%; left: 0%; } /* Ajustado para mobile */
-            .bubble-secondary-2 { width: 100px; height: 100px; font-size: 0.875rem; bottom: 5%; right: 0%; } /* Ajustado para mobile */
-            .bubble-secondary-3 { width: 60px; height: 60px; font-size: 0.625rem; top: 0%; right: 10%; } /* Ajustado para mobile */
-            .bubble-container { height: 280px; } /* Ajusta altura do contêiner */
-        }
-
     </style>
 </head>
 <body>
 
     <div id="app" class="relative h-screen w-full overflow-hidden">
-        
+        <!-- Efeito Noise Corrigido -->
         <div class="noise-overlay"></div>
 
-        <!-- Barras de Progresso --><div class="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-3" id="progress-container"></div>
+        <!-- Barras de Progresso -->
+        <div class="absolute top-4 left-0 right-0 z-50 flex gap-1.5 px-4" id="progress-container"></div>
 
-        <!-- SLIDE 1: Intro --><div class="slide bg-intro animated-bg" data-index="0">
+        <!-- SLIDE 0: Intro -->
+        <div class="slide bg-intro animated-bg" data-index="0">
             <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
-                <i data-lucide="atom" class="w-96 h-96 text-blue-300 animate-float"></i>
+                <i data-lucide="flask-conical" class="w-96 h-96 text-green-300 animate-float"></i>
             </div>
-            <h2 class="text-xl font-bold mb-6 tracking-wider uppercase animate-pop delay-100">Fala, Cientistas!</h2>
-            <div class="relative animate-pop delay-200">
-                <h1 class="text-5xl font-black leading-none font-grotesk text-stroke opacity-30 absolute top-1 left-1 z-0">JORNADA</h1>
-                <h1 class="text-5xl font-black leading-none font-grotesk relative z-10">JORNADA<br>CIENTÍFICA</h1>
+            <h2 class="text-sm font-bold mb-6 tracking-[0.3em] uppercase animate-pop delay-100">Retrospectiva da Feira</h2>
+            <div class="relative animate-pop delay-200 z-10">
+                <h1 class="text-5xl font-black leading-none font-grotesk text-stroke opacity-30 absolute top-1 left-1 z-0 w-full">CLIMPLENT</h1>
+                <h1 class="text-5xl font-black leading-none font-grotesk relative z-10">CLIMPLENT</h1>
             </div>
-            <div class="mt-8 inline-block bg-white text-blue-900 font-black text-3xl px-4 py-2 transform -rotate-2 animate-pop delay-300 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)]">
-                FEIRA 2025
+            <div class="mt-6 inline-block bg-white text-green-900 font-bold text-xl px-6 py-2 rounded-full transform -rotate-2 animate-pop delay-300 shadow-lg z-20">
+                Bastidores
             </div>
-            <p class="mt-12 text-lg animate-pop delay-500 font-light">Vamos ver o que rolou até aqui?</p>
+            <p class="mt-12 px-8 text-lg animate-pop delay-500 font-light opacity-90 z-20">O que ninguém conta sobre fazer cimento...</p>
         </div>
 
-        <!-- SLIDE 2: Dias de Projeto --><div class="slide bg-days animated-bg" data-index="1">
-            <i data-lucide="calendar-clock" class="w-12 h-12 mb-8 text-emerald-200 animate-float"></i>
-            <p class="text-2xl font-bold animate-pop delay-100">O projeto começou<br>e não parou mais.</p>
+        <!-- SLIDE 1: Tempo de Projeto -->
+        <div class="slide bg-time animated-bg" data-index="1">
+            <i data-lucide="calendar-clock" class="w-16 h-16 mb-6 text-white/80 animate-float"></i>
+            <p class="text-xl font-bold animate-pop delay-100">A jornada começou em<br>25 de fevereiro...</p>
             
-            <div class="my-10 animate-pop delay-200">
-                <span id="days-counter" class="text-8xl font-black font-grotesk tracking-tighter text-emerald-300">0</span>
-                <p class="text-sm uppercase tracking-widest mt-2 opacity-80">Dias de dedicação</p>
+            <div class="my-8 animate-pop delay-200">
+                <span id="days-counter" class="text-8xl font-black font-grotesk tracking-tighter">0</span>
+                <p class="text-sm uppercase tracking-widest mt-2 opacity-80 font-bold">Dias de Projeto</p>
             </div>
 
-            <div class="animate-pop delay-500 glass-card p-4 rounded-xl max-w-xs mx-auto transform rotate-1">
-                <p class="text-sm font-medium">Vocês sobreviveram a <span class="text-emerald-300 font-bold">14 versões</span> diferentes da introdução.</p>
+            <div class="animate-pop delay-500 glass-card p-4 rounded-xl max-w-xs mx-auto">
+                <p class="text-sm">Vocês resistiram bravamente. (E o projeto também).</p>
             </div>
         </div>
 
-        <!-- SLIDE 3: Estatísticas (Bubbles) -- CORRIGIDO AQUI --><div class="slide bg-stats animated-bg" data-index="2">
-            <h2 class="text-3xl font-bold mb-8 animate-pop delay-100 w-full z-20 relative">A química do sucesso</h2>
+        <!-- SLIDE 2: Evolução do Artigo -->
+        <div class="slide bg-evolution animated-bg" data-index="2">
+            <h2 class="text-2xl font-bold mb-2 animate-pop delay-100 w-full z-20 relative uppercase tracking-widest">A Evolução do Doc</h2>
+            <p class="text-xs opacity-70 mb-8 animate-pop delay-100">Cresceu mais que a nossa paciência:</p>
+            
+            <div class="flex items-center justify-center gap-4 w-full max-w-sm px-2 mb-8">
+                <!-- Antes -->
+                <div class="flex flex-col items-center animate-pop delay-200 opacity-70">
+                    <div class="w-20 h-24 border-2 border-white/30 rounded bg-white/10 flex items-center justify-center mb-2">
+                        <span class="text-xl font-bold">v1</span>
+                    </div>
+                    <p class="text-sm font-bold">11 Pgs</p>
+                    <p class="text-[10px]">14.747 chars</p>
+                </div>
+
+                <i data-lucide="arrow-right" class="w-8 h-8 text-white animate-pulse"></i>
+
+                <!-- Depois -->
+                <div class="flex flex-col items-center animate-pop delay-400 scale-110">
+                    <div class="w-24 h-32 bg-white text-pink-900 rounded shadow-2xl flex flex-col items-center justify-center mb-2 relative overflow-hidden">
+                         <div class="absolute bottom-0 w-full h-2 bg-pink-500"></div>
+                         <span class="text-3xl font-black">44</span>
+                         <span class="text-[10px] font-bold uppercase">Páginas</span>
+                    </div>
+                    <p class="text-xl font-black text-pink-200">68.444</p>
+                    <p class="text-xs font-bold uppercase tracking-wider">Caracteres</p>
+                </div>
+            </div>
+
+            <div class="animate-pop delay-500 px-8">
+                 <p class="text-sm italic opacity-90 bg-black/20 p-3 rounded-lg">Isso é um aumento de <span class="font-bold text-white">364%</span> de puro conhecimento (e café).</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Estatísticas do Caos -->
+        <div class="slide bg-stats animated-bg" data-index="3">
+            <h2 class="text-2xl font-bold mb-2 animate-pop delay-100 w-full z-20 relative">A Química do Surto</h2>
+            <p class="text-xs opacity-70 mb-4 animate-pop delay-100">Dados não oficiais do laboratório:</p>
             
             <div class="bubble-container my-4 z-10">
-                <!-- Bolha Principal --><div class="bubble bubble-main animate-pop delay-200">
-                    <span>482</span>
-                    <span class="text-xs font-bold uppercase tracking-wider">Páginas Lidas</span>
+                <div class="bubble bubble-main animate-pop delay-200">
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1">PESO</span>
+                    <span class="leading-none">25g</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-purple-700 mt-1">Amostra Perfeita</span>
                 </div>
-                <!-- Bolhas Secundárias --><div class="bubble bubble-secondary-1 animate-pop delay-300">
-                    <span>2.5L</span>
-                    <span class="text-[10px] font-bold uppercase">De Café</span>
+                <div class="bubble bubble-secondary-1 animate-pop delay-300 flex flex-col justify-center">
+                    <span class="leading-tight text-xl font-black">98%</span>
+                    <span class="text-[10px] font-bold uppercase">Fé</span>
                 </div>
-                <div class="bubble bubble-secondary-2 animate-pop delay-400">
-                    <span>∞</span>
-                    <span class="text-[10px] font-bold uppercase">Surtos Leves</span>
+                <div class="bubble bubble-secondary-2 animate-pop delay-400 flex flex-col justify-center">
+                    <span class="leading-tight text-xl font-black">500g</span>
+                    <span class="text-[10px] font-bold uppercase">Moído na Mão</span>
                 </div>
-                <div class="bubble bubble-secondary-3 animate-pop delay-500">
-                    <span>27</span>
-                    <span class="text-[10px] font-bold uppercase">Hipóteses</span>
+                <div class="bubble bubble-secondary-3 animate-pop delay-500 flex flex-col justify-center">
+                    <span class="leading-tight text-2xl font-black">∞</span>
+                    <span class="text-[10px] font-bold uppercase">Cafés</span>
                 </div>
             </div>
-
-            <p class="text-lg animate-pop delay-500 relative z-20 px-8 mt-4">A metodologia? <span class="font-bold text-purple-300">Confia no processo.</span></p>
+            <p class="text-sm animate-pop delay-500 relative z-20 px-8 mt-4 opacity-80 font-bold">A metodologia? "Confia no processo".</p>
         </div>
 
-        <!-- SLIDE 4: O "Artista" (O Inimigo ABNT) --><div class="slide bg-stress animated-bg" data-index="3">
-            <div class="absolute top-10 right-10 animate-pulse-slow text-red-300">
-                <i data-lucide="flame" class="w-8 h-8 fill-current"></i>
+        <!-- SLIDE 4: Vilão 1 (Matheus) -->
+        <div class="slide bg-enemy animated-bg" data-index="4">
+            <div class="absolute top-10 right-10 animate-pulse-slow text-yellow-300">
+                <i data-lucide="signal-low" class="w-8 h-8 fill-current"></i>
+            </div>
+            <p class="text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-pop delay-100 opacity-80">Maior Desafio do Ano</p>
+            
+            <div class="w-64 h-64 bg-gray-900 rounded-full mb-8 animate-pop delay-200 border-4 border-white/20 shadow-2xl overflow-hidden flex items-center justify-center relative">
+                <div class="absolute inset-0 opacity-20 bg-pattern-dots"></div>
+                <div class="z-10 text-center flex flex-col items-center">
+                    <i data-lucide="message-square-warning" class="w-24 h-24 mx-auto mb-2 text-yellow-500 animate-bounce"></i>
+                    <h1 class="text-xl font-black leading-tight">SE COMUNICAR<br>COM O<br>MATHEUS</h1>
+                </div>
             </div>
 
-            <p class="text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-pop delay-100 opacity-80">Maior Inimigo</p>
-            
+            <div class="flex flex-col gap-2 w-full max-w-xs animate-pop delay-300 text-left px-4 bg-white/10 p-4 rounded-lg">
+                <p class="text-xs font-bold uppercase opacity-50 mb-2">Taxa de resposta:</p>
+                <div class="w-full bg-gray-700 rounded-full h-4 mb-2 overflow-hidden">
+                    <div class="bg-red-500 h-4 rounded-full animate-pulse" style="width: 5%"></div>
+                </div>
+                <p class="text-xs italic text-center">"Visualizou e não respondeu..."</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Vilão 2 (ABNT) -->
+        <div class="slide bg-abnt animated-bg" data-index="5">
+            <p class="text-sm font-bold tracking-[0.3em] uppercase mb-6 animate-pop delay-100 opacity-80">Pesadelo da Madrugada</p>
             <div class="relative mb-8 group perspective-1000 animate-pop delay-200">
-                <div class="w-64 h-64 bg-gray-900 rounded-lg overflow-hidden relative z-10 border border-white/20 shadow-2xl flex items-center justify-center">
-                    <div class="absolute inset-0 bg-gradient-to-br from-gray-800 to-black"></div>
-                    <i data-lucide="file-warning" class="w-32 h-32 text-red-500 relative z-10"></i>
-                    <h1 class="absolute bottom-4 left-0 w-full text-center text-2xl font-black text-white drop-shadow-lg">ABNT</h1>
+                <div class="w-64 h-64 bg-red-900 rounded-lg overflow-hidden relative z-10 border-2 border-red-500 shadow-[0_0_40px_rgba(220,38,38,0.6)] flex items-center justify-center">
+                    <div class="absolute inset-0 bg-pattern-grid opacity-30"></div>
+                    <i data-lucide="file-warning" class="w-32 h-32 text-red-300 relative z-10 animate-float"></i>
+                    <h1 class="absolute bottom-4 left-0 w-full text-center text-4xl font-black text-white drop-shadow-lg tracking-tighter">ABNT</h1>
                 </div>
-                <div class="absolute -inset-2 bg-red-600 rounded-lg blur opacity-40 group-hover:opacity-70 transition duration-500"></div>
             </div>
-
             <div class="flex flex-col gap-3 w-full max-w-xs animate-pop delay-300">
-                <div class="flex items-center justify-between glass-card px-4 py-3 rounded-lg">
+                <div class="flex items-center justify-between glass-card px-4 py-3 rounded-lg border-l-4 border-red-500">
                     <span class="text-sm opacity-80">Margens</span>
-                    <span class="font-bold text-red-300">Ajustadas</span>
+                    <span class="font-bold text-red-300">Erradas</span>
                 </div>
-                <div class="flex items-center justify-between glass-card px-4 py-3 rounded-lg">
+                <div class="flex items-center justify-between glass-card px-4 py-3 rounded-lg border-l-4 border-red-500">
                     <span class="text-sm opacity-80">Referências</span>
-                    <span class="font-bold text-red-300">Citadas</span>
+                    <span class="font-bold text-red-300">Sumiram</span>
                 </div>
-                <p class="text-xs opacity-60 mt-2">O arquivo "final_agora_vai_v3.docx" foi salvo com sucesso.</p>
+                <p class="text-xs opacity-60 mt-2 text-center">"O arquivo final_agora_vai_v2.docx corrompeu."</p>
             </div>
         </div>
 
-        <!-- SLIDE 5: Boa Sorte --><div class="slide bg-luck animated-bg" data-index="4">
-            <h2 class="text-2xl font-bold mb-6 animate-pop delay-100 uppercase tracking-widest">O Veredito</h2>
+        <!-- SLIDE 6: Superação -->
+        <div class="slide bg-resilience animated-bg" data-index="6">
+            <h2 class="text-sm font-bold mb-8 animate-pop delay-100 uppercase tracking-[0.3em] opacity-80">Zona de Risco</h2>
             
-            <div class="bg-white/10 p-8 rounded-full w-48 h-48 flex items-center justify-center mb-8 animate-pop delay-200 shadow-[0_0_50px_rgba(251,191,36,0.4)]">
-                 <i data-lucide="trophy" class="w-24 h-24 text-yellow-300 animate-float"></i>
+            <div class="bg-white/10 p-6 rounded-2xl w-full max-w-xs mb-8 animate-pop delay-200 border border-teal-400/30 relative overflow-hidden shadow-xl">
+                 <div class="absolute -right-4 -top-4 w-24 h-24 bg-teal-500/20 rounded-full blur-xl"></div>
+                 
+                 <h1 class="text-6xl font-black text-white mb-2">2<span class="text-2xl text-teal-300 font-bold"> PESSOAS</span></h1>
+                 <p class="text-lg font-bold mb-4">tentaram desistir...</p>
+                 <div class="w-full h-px bg-white/20 mb-4"></div>
+                 <h1 class="text-6xl font-black text-white mb-2">2<span class="text-2xl text-teal-300 font-bold"> VEZES</span></h1>
+                 <p class="text-lg font-bold">cada uma.</p>
             </div>
 
-            <h1 class="text-4xl font-black animate-pop delay-300 leading-tight">VOCÊS VÃO<br><span class="text-yellow-400">BRILHAR!</span></h1>
-            
-            <p class="mt-6 px-8 text-lg animate-pop delay-400 opacity-90">Respirem fundo, bebam água e lembrem-se: vocês sabem mais sobre o projeto do que qualquer avaliador.</p>
+            <div class="animate-pop delay-400 text-center px-8">
+                <h2 class="text-3xl font-black text-white mb-2">MAS VOCÊS<br><span class="text-teal-300">FICARAM!</span></h2>
+                <p class="text-sm font-medium opacity-90 bg-black/20 p-3 rounded-lg inline-block shadow-sm">Parabéns pela resiliência. O projeto só existe porque vocês não soltaram a mão.</p>
+            </div>
+        </div>
 
+        <!-- SLIDE 7: O Veredito -->
+        <div class="slide bg-gold animated-bg" data-index="7">
+            <h2 class="text-sm font-bold mb-8 animate-pop delay-100 uppercase tracking-[0.4em] text-yellow-100">O Veredito</h2>
+            <div class="bg-yellow-500/20 p-8 rounded-full w-56 h-56 flex items-center justify-center mb-8 animate-pop delay-200 shadow-[0_0_60px_rgba(251,191,36,0.5)] border border-yellow-400/50 relative">
+                 <div class="absolute inset-0 rounded-full animate-pulse bg-yellow-400/10"></div>
+                 <i data-lucide="trophy" class="w-28 h-28 text-yellow-200 animate-float filter drop-shadow-[0_0_15px_rgba(253,224,71,0.8)]"></i>
+            </div>
+            <h1 class="text-5xl font-black animate-pop delay-300 leading-none text-white drop-shadow-lg">VOCÊS VÃO<br><span class="text-yellow-300">BRILHAR!</span></h1>
+            <p class="mt-8 px-8 text-lg animate-pop delay-400 text-yellow-50 font-medium">Respirem fundo, bebam água e mostrem o cimento!</p>
             <div class="mt-8 animate-pop delay-500">
-                <span class="inline-block px-4 py-1 rounded-full border border-yellow-400/50 text-yellow-300 text-xs font-bold tracking-wider">#VEMMEDALHA</span>
+                <span class="inline-block px-6 py-2 rounded-full bg-yellow-600/40 border border-yellow-400 text-yellow-200 text-sm font-black tracking-wider shadow-lg backdrop-blur-md">#VEMMEDALHA</span>
             </div>
         </div>
 
-        <!-- SLIDE 6: Resumo Final --><div class="slide bg-summary animated-bg" data-index="5">
-            <h1 class="text-3xl font-black mb-4 animate-pop delay-100 font-grotesk">RESUMO DO PROJETO</h1>
-            
+        <!-- SLIDE 8: Resumo + Torcida -->
+        <div class="slide bg-summary animated-bg" data-index="8">
+            <h1 class="text-3xl font-black mb-4 animate-pop delay-100 font-grotesk">RESUMO DO GRUPO</h1>
             <div class="glass-card p-6 rounded-2xl border border-white/20 w-full max-w-xs animate-pop delay-200 shadow-2xl relative overflow-hidden">
                 <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-400 rounded-full blur-3xl opacity-50"></div>
-                
                 <div class="text-left space-y-4">
                     <div>
                         <p class="text-[10px] uppercase tracking-wider opacity-70">Status Atual</p>
                         <div class="flex items-center gap-2">
                             <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                            <p class="font-bold text-lg">Prontos para a Feira</p>
+                            <p class="font-bold text-lg">Prontos para Amassar!</p>
                         </div>
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-4 pt-2 border-t border-white/10">
                         <div>
-                            <p class="text-[10px] uppercase tracking-wider opacity-70">Dedicação</p>
-                            <p class="font-bold text-cyan-300">110%</p>
+                            <p class="text-[10px] uppercase tracking-wider opacity-70">Nível de Sorte</p>
+                            <p class="font-bold text-cyan-300 text-sm">Máximo</p>
                         </div>
                         <div>
-                            <p class="text-[10px] uppercase tracking-wider opacity-70">Sorte</p>
-                            <p class="font-bold text-cyan-300">Máxima</p>
+                            <p class="text-[10px] uppercase tracking-wider opacity-70">Medalha</p>
+                            <p class="font-bold text-cyan-300 text-sm">Vem Ouro</p>
                         </div>
                     </div>
-                    
                     <div class="pt-2 border-t border-white/10">
-                        <p class="text-[10px] uppercase tracking-wider opacity-70">Vibe do Grupo</p>
-                        <p class="font-black text-xl mt-1 text-white">GÊNIOS CANSADOS</p>
+                        <p class="text-[10px] uppercase tracking-wider opacity-70">Vibe do Projeto</p>
+                        <p class="font-black text-xl mt-1 text-white uppercase">CIMENTO & CAOS</p>
                     </div>
                 </div>
             </div>
+            
+            <div class="animate-pop delay-400 mt-6 w-full max-w-xs">
+                 <div class="bg-white text-black p-4 rounded-xl text-center shadow-xl rotate-1">
+                     <p class="text-xs font-bold uppercase tracking-widest text-blue-600 mb-1">Mensagem Especial</p>
+                     <p class="font-black text-lg">"Estou torcendo muito por vocês! Arrasem!"</p>
+                     <p class="text-right text-xs mt-2 opacity-50">- Seu amigo</p>
+                 </div>
+            </div>
 
-            <div class="flex gap-3 mt-8 w-full max-w-xs">
-                <button onclick="location.reload()" class="flex-1 bg-white text-black font-bold py-3 rounded-full hover:bg-gray-200 transition-colors animate-pop delay-500 flex items-center justify-center gap-2 text-sm">
+            <div class="flex gap-3 mt-6 w-full max-w-xs">
+                <button onclick="location.reload()" class="flex-1 bg-transparent border border-white/30 hover:bg-white/10 font-bold py-3 rounded-full transition-colors animate-pop delay-500 flex items-center justify-center gap-2 text-sm">
                     <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Replay
-                </button>
-                <button class="flex-1 bg-transparent border border-white/30 hover:bg-white/10 font-bold py-3 rounded-full transition-colors animate-pop delay-500 flex items-center justify-center gap-2 text-sm">
-                    <i data-lucide="share-2" class="w-4 h-4"></i> Print
                 </button>
             </div>
         </div>
 
-        <!-- Áreas de Toque --><div id="tap-left" class="absolute top-0 left-0 w-1/3 h-full z-40"></div>
+        <!-- Áreas de Toque -->
+        <div id="tap-left" class="absolute top-0 left-0 w-1/3 h-full z-40"></div>
         <div id="tap-right" class="absolute top-0 right-0 w-2/3 h-full z-40"></div>
     </div>
 
@@ -363,7 +430,13 @@
         const progressContainer = document.getElementById('progress-container');
         let currentIndex = 0;
         let autoAdvanceTimer;
-        const slideDuration = 6000;
+        const slideDuration = 9000; 
+
+        // Cálculo Dinâmico dos Dias (Começo 25/02/2024)
+        const startDate = new Date('2024-02-25');
+        const today = new Date();
+        const timeDiff = Math.abs(today - startDate);
+        const dayDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
         // Inicializar Barras
         slides.forEach((_, idx) => {
@@ -429,9 +502,10 @@
                 if (idx === currentIndex) {
                     slide.classList.add('active');
                     resetAnimations(slide);
+                    
+                    // Slide 1: Dias de Projeto
                     if (idx === 1) {
-                        // Dias de projeto (fictício: 245 dias)
-                        setTimeout(() => animateValue("days-counter", 0, 245, 2000), 500);
+                        setTimeout(() => animateValue("days-counter", 0, dayDiff, 2000), 500);
                     }
                 } else {
                     slide.classList.remove('active');
