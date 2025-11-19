@@ -92,6 +92,8 @@
         .bg-toni { background-image: linear-gradient(-45deg, #1d4ed8, #172554, #3b82f6); }
         .bg-resilience { background-image: linear-gradient(-45deg, #0f766e, #042f2e, #14b8a6); }
         .bg-gold { background-image: linear-gradient(-45deg, #b45309, #451a03, #f59e0b); }
+        /* Novo BG para agradecimento */
+        .bg-gratitude { background-image: linear-gradient(-45deg, #be123c, #881337, #fb7185); } 
         .bg-summary { background-image: linear-gradient(-45deg, #0891b2, #164e63, #06b6d4); }
         
         .bg-photo {
@@ -143,6 +145,7 @@
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
         .delay-500 { animation-delay: 500ms; }
         .delay-700 { animation-delay: 700ms; }
         .delay-1000 { animation-delay: 1000ms; }
@@ -213,7 +216,6 @@
             <div class="mt-8 inline-block bg-white text-green-900 font-black text-xl px-8 py-3 rounded-full transform -rotate-2 shadow-[0_10px_20px_rgba(0,0,0,0.3)] z-20 anim-pop delay-500 border-2 border-green-300">
                 Bastidores
             </div>
-            <!-- <p class="mt-16 px-8 text-lg font-medium opacity-90 z-20 anim-fade-up delay-700 italic bg-black/20 py-2 rounded-lg backdrop-blur-sm">Isso o @Climplentoficial não mostra...</p> -->
         </div>
 
         <!-- SLIDE 1: Tempo -->
@@ -303,7 +305,7 @@
                  <div class="absolute inset-0 border-4 border-dashed border-yellow-500/30 rounded-full animate-[spin_12s_linear_infinite]"></div>
                 <div class="z-10 text-center flex flex-col items-center p-4">
                     <i data-lucide="refresh-cw" class="w-20 h-20 mx-auto mb-4 text-yellow-500 animate-spin" style="animation-duration: 8s"></i>
-                    <h1 class="text-xl font-black leading-tight text-gray-200">EXPLICAR PRO<br><span class="text-yellow-400 text-3xl">MATHEUS</span><br>DE NOVO</h1>
+                    <h1 class="text-xl font-black leading-tight text-gray-200">EXPLICAR PRO<br><span class="text-yellow-400 text-3xl">MATHEUS</span><br>(DE NOVO)</h1>
                 </div>
             </div>
 
@@ -434,9 +436,42 @@
                 </span>
             </div>
         </div>
+        
+        <!-- SLIDE 9: Agradecimento (NOVO) -->
+        <div class="slide bg-gratitude animated-bg" data-index="9">
+            <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div class="absolute top-10 left-10 w-32 h-32 bg-pink-400 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+                <div class="absolute bottom-10 right-10 w-40 h-40 bg-rose-600 rounded-full blur-3xl opacity-20 animate-pulse delay-700"></div>
+            </div>
 
-        <!-- SLIDE 9: Resumo -->
-        <div class="slide bg-summary animated-bg" data-index="9">
+            <h2 class="text-sm font-bold mb-6 anim-fade-up delay-100 uppercase tracking-[0.3em] text-rose-200">De Coração</h2>
+            
+            <div class="relative mb-8 anim-scale-in delay-300 group">
+                <div class="absolute inset-0 bg-rose-500 blur-2xl opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+                <div class="bg-white/10 backdrop-blur-xl p-8 rounded-full border border-white/20 shadow-2xl relative z-10">
+                    <i data-lucide="heart-handshake" class="w-20 h-20 text-rose-200 animate-float"></i>
+                </div>
+            </div>
+
+            <h1 class="text-4xl font-black anim-fade-up delay-500 text-white mb-6 text-center leading-tight drop-shadow-lg">
+                PARABÉNS<br><span class="text-rose-300">POR TUDO!</span>
+            </h1>
+
+            <div class="w-full max-w-xs space-y-4 anim-fade-up delay-700">
+                <div class="glass-card p-5 rounded-xl border-l-4 border-rose-400 bg-rose-900/20 text-left">
+                    <p class="text-base font-medium text-rose-50 leading-relaxed" style="text-align: center;">
+                        "Tenho muito orgulho de ter visto essa jornada de perto. Vão com tudo! Vocês já são gigantes só pelo tanto que lutaram até aqui."
+                    </p>
+                </div>
+                
+                <div class="inline-block bg-rose-100 text-rose-900 px-6 py-2 rounded-full font-black text-sm uppercase tracking-wider shadow-lg transform rotate-1">
+                    Amo muito vcs! ❤️
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Resumo -->
+        <div class="slide bg-summary animated-bg" data-index="10">
             <h1 class="text-5xl font-black mb-8 anim-fade-up delay-100 font-grotesk tracking-tight text-cyan-50 drop-shadow-lg">RESUMO</h1>
             
             <div class="glass-card p-8 rounded-3xl border border-white/20 w-full max-w-xs anim-scale-in delay-300 shadow-2xl relative overflow-hidden bg-cyan-900/20">
@@ -473,14 +508,14 @@
             <div class="anim-fade-up delay-700 mt-8 w-full max-w-xs perspective-500">
                 <div class="bg-white text-black p-5 rounded-2xl text-center shadow-[0_20px_40px_rgba(0,0,0,0.3)] rotate-x-10 transform transition hover:rotate-0 duration-500 relative">
                     <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-widest shadow-lg">Mensagem Especial</div>
-                    <p class="font-black text-xl mt-3 leading-tight">"Tô muito feliz de ter acompanhado essa jornada desde o começo, tô torcendo muito por vocês!! Arrasem lá!"</p>
+                    <p class="font-black text-xl mt-3 leading-tight">"Vocês são incríveis!! Arrasem lá!"</p>
                     <p class="text-right text-xs font-bold mt-3 text-blue-800 opacity-70">- Toni</p>
                 </div>
             </div>
         </div>
 
-        <!-- SLIDE 10: Foto -->
-        <div class="slide bg-photo" data-index="10" style="background-image: url(climpzitos.jpg);">
+        <!-- SLIDE 11: Foto -->
+        <div class="slide bg-photo" data-index="11" style="background-image: url(climpzitos.jpg);">
             <div class="photo-overlay"></div>
             <div class="relative z-10 flex flex-col items-center justify-end h-full w-full pb-24 px-6">
                 
